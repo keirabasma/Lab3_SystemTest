@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>System Testing: Interactive Tutorial</title>
+<style>
+:root{--bg:#f7f7f4;--card:#fff;--ink:#1c1c1a;--mute:#6b6b66;--line:#e2e2dc;--acc:#2f6fed;--acc2:#e8efff;--ok:#1a7f45;--okbg:#e4f5ea;--bad:#b3261e;--badbg:#fde8e6;--code:#14161a;--codeink:#e6e6e0;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15161a;--card:#1e2025;--ink:#ececE6;--mute:#a0a09a;--line:#33353b;--acc:#7aa2ff;--acc2:#222c45;--ok:#5fd28b;--okbg:#17301f;--bad:#ff8b82;--badbg:#3a1d1b;--code:#0d0e11}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:820px;margin:0 auto;padding:20px 16px 60px}
+h1{font-size:1.6rem;margin:.2em 0}h2{font-size:1.25rem;margin:.2em 0 .6em}
+.sub{color:var(--mute);margin:0 0 16px}
+.pick{display:flex;gap:10px;margin:12px 0}
+.pick button{flex:1;padding:12px;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;font-size:1rem;cursor:pointer;font-weight:600}
+.pick button.on{border-color:var(--acc);background:var(--acc2)}
+.bar{height:8px;background:var(--line);border-radius:6px;overflow:hidden;margin:10px 0 4px}
+.bar i{display:block;height:100%;width:0;background:var(--acc);transition:width .3s}
+.meta{font-size:.85rem;color:var(--mute);display:flex;justify-content:space-between}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-top:14px}
+pre{background:var(--code);color:var(--codeink);padding:12px;border-radius:10px;overflow-x:auto;font:13.5px/1.5 ui-monospace,Menlo,Consolas,monospace;margin:8px 0;position:relative}
+.cp{float:right;font-size:.75rem;background:#333a;color:#fff;border:0;border-radius:6px;padding:3px 8px;cursor:pointer;margin:0 0 4px 8px}
+textarea{width:100%;min-height:190px;background:var(--code);color:var(--codeink);border:1px solid var(--line);border-radius:10px;padding:12px;font:13.5px/1.5 ui-monospace,Menlo,Consolas,monospace;resize:vertical}
+.btn{background:var(--acc);color:#fff;border:0;border-radius:8px;padding:9px 16px;font-size:.95rem;cursor:pointer;margin:8px 8px 0 0}
+.btn.ghost{background:transparent;color:var(--acc);border:1px solid var(--acc)}
+.btn:disabled{opacity:.4;cursor:default}
+.out{margin-top:10px;padding:10px 12px;border-radius:10px;font:13.5px/1.5 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap}
+.out.ok{background:var(--okbg);color:var(--ok)}.out.bad{background:var(--badbg);color:var(--bad)}
+.q{margin:14px 0}.q p{margin:0 0 6px;font-weight:600}
+.opt{display:block;width:100%;text-align:left;padding:10px 12px;margin:6px 0;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;cursor:pointer;font-size:.95rem}
+.q:not(.lock) .opt:hover{border-color:var(--acc)}.q.lock .opt{cursor:default}.opt.right{background:var(--okbg);border-color:var(--ok)}.opt.wrong{background:var(--badbg);border-color:var(--bad)}
+.why{font-size:.9rem;color:var(--mute);margin-top:4px}
+.nav{display:flex;justify-content:space-between;margin-top:18px}
+ol.st,ul.st{padding-left:20px}ol.st li,ul.st li{margin:6px 0}h3{font-size:1.05rem;margin:16px 0 4px}
+table{width:100%;border-collapse:collapse;font-size:.9rem;margin:8px 0}th,td{text-align:left;padding:8px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--mute);font-weight:600}
+.tw{overflow-x:auto}
+code{background:var(--acc2);padding:1px 5px;border-radius:5px;font-size:.9em}
+.tip{border-left:4px solid var(--acc);background:var(--acc2);padding:8px 12px;border-radius:0 8px 8px 0;margin:10px 0}
+.dots{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.dots button{width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;font-size:.8rem}
+.dots button.cur{background:var(--acc);color:#fff;border-color:var(--acc)}.dots button.done{border-color:var(--ok);color:var(--ok)}
+.dots button.cur.done{color:#fff}
+.out{max-height:340px;overflow:auto}
+kbd{background:var(--acc2);border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:.85em}
+details.fl{margin:8px 0}details.fl summary{cursor:pointer;color:var(--acc);font-weight:600}
+textarea{min-height:260px;tab-size:4}
+.btn[hidden]{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>🧪 Learn Testing: System Testing</h1>
+<p class="sub">Test the whole application end to end. Pick a language, work through each step, run real tests in the page, and check your understanding with exercises and quizzes.</p>
+<div class="pick" id="pick">
+<button data-l="py">🐍 Python (unittest)</button>
+<button data-l="java">☕ Java (JUnit 5)</button>
+</div>
+<div class="bar"><i id="pb"></i></div>
+<div class="meta"><span id="pl"></span><span id="ps"></span></div>
+<div class="dots" id="dots"></div>
+<div id="stage"></div>
+<div class="nav"><button class="btn ghost" id="prev">← Back</button><button class="btn" id="next">Next →</button></div>
+</div>
+
+<script>
+const D={
+py:{name:"Python",
+calc:`# calculator.py
+class Calculator:
+    def add(self, a, b):
+        return a + b
+
+    def divide(self, a, b):
+        if b == 0:
+            raise ValueError("Division by zero is not allowed")
+        return a // b`,
+svc:`# math_service.py
+from calculator import Calculator
+
+class MathService:
+    def __init__(self, calculator: Calculator):
+        self.calculator = calculator
+
+    def add_and_divide(self, a, b, divisor):
+        total = self.calculator.add(a, b)
+        return self.calculator.divide(total, divisor)`,
+app:`# app.py  (the whole application, with a command-line entry point)
+import sys
+from calculator import Calculator
+from math_service import MathService
+
+USAGE = "Usage: add A B | divide A B | add_divide A B C"
+
+class CalculatorApp:
+    def __init__(self):
+        self.calc = Calculator()
+        self.service = MathService(self.calc)
+
+    def run(self, args):
+        """Returns (exit_code, output). 0 = ok, 1 = error, 2 = bad usage."""
+        if not args:
+            return 2, USAGE
+        try:
+            nums = [int(x) for x in args[1:]]
+        except ValueError:
+            return 2, "Error: arguments must be integers"
+        try:
+            if args[0] == "add" and len(nums) == 2:
+                return 0, str(self.calc.add(*nums))
+            if args[0] == "divide" and len(nums) == 2:
+                return 0, str(self.calc.divide(*nums))
+            if args[0] == "add_divide" and len(nums) == 3:
+                return 0, str(self.service.add_and_divide(*nums))
+        except ValueError as e:
+            return 1, "Error: " + str(e)
+        return 2, USAGE
+
+if __name__ == "__main__":
+    code, out = CalculatorApp().run(sys.argv[1:])
+    print(out)
+    sys.exit(code)`,
+test:`# test_system.py
+import unittest
+from app import CalculatorApp
+
+def run_cli(*args):
+    """Drive the whole app like a user: arguments in, (exit code, output) out."""
+    return CalculatorApp().run(list(args))
+
+class TestCalculatorSystem(unittest.TestCase):
+    def test_add_command(self):
+        self.assertEqual(run_cli("add", "2", "3"), (0, "5"))
+
+    def test_add_divide_workflow(self):
+        self.assertEqual(run_cli("add_divide", "4", "6", "5"), (0, "2"))
+
+    def test_divide_by_zero_reports_error(self):
+        code, out = run_cli("divide", "10", "0")
+        self.assertEqual(code, 1)
+        self.assertIn("Division by zero", out)
+
+    def test_non_integer_input_is_rejected(self):
+        code, out = run_cli("add", "two", "3")
+        self.assertEqual(code, 2)
+
+if __name__ == '__main__':
+    unittest.main()`,
+proc:`# Truly black-box: launch the program as a separate process
+import subprocess, sys
+r = subprocess.run([sys.executable, "app.py", "add", "2", "3"],
+                   capture_output=True, text=True)
+assert r.returncode == 0 and r.stdout.strip() == "5"`,
+setup:[["Check Python is installed","Run <code>python --version</code> (or <code>python3 --version</code>). You need 3.8 or newer."],["Reuse your project folder","Use the <code>testing-demo</code> folder from the first tutorial, or create one. You need <code>calculator.py</code>, <code>math_service.py</code> and the new <code>app.py</code> (shown in step 2)."],["Nothing to install","<code>unittest</code> ships with Python. The system tests go in <code>test_system.py</code>."],["Run tests","Use <code>python -m unittest -v</code>. You can also try the app by hand: <code>python app.py add 2 3</code>."]],
+run:"python -m unittest -v",
+ex1:{starter:`import unittest
+from app import CalculatorApp
+
+def run_cli(*args):
+    return CalculatorApp().run(list(args))
+
+# Add a system test for the command:  add -2 -3
+# It must exit with code 0 and print "-5".
+
+class TestCalculatorSystem(unittest.TestCase):
+    pass  # replace this line with your test
+`,sol:`    def test_add_negative_numbers(self):
+        self.assertEqual(run_cli("add", "-2", "-3"), (0, "-5"))`,chk:[[/def\s+test_\w+\s*\(self\)/,"Define a test_… method that takes self"],[/run_cli\s*\(\s*["']add["']\s*,\s*["']-2["']\s*,\s*["']-3["']\s*\)/,'Run the command: run_cli("add", "-2", "-3")'],[/assert\w+\s*\(/,"Use an assert… method"],[/-5/,'Expect the output "-5"'],[/\b0\b/,"Check the exit code 0"]]},
+ex2:{starter:`import unittest
+from app import CalculatorApp
+
+def run_cli(*args):
+    return CalculatorApp().run(list(args))
+
+# Add a system test for the failing workflow:  add_divide 4 6 0
+# It must exit with code 1 and the message must mention "Division by zero".
+
+class TestCalculatorSystem(unittest.TestCase):
+    pass  # replace this line with your test
+`,sol:`    def test_add_divide_by_zero_reports_error(self):
+        code, out = run_cli("add_divide", "4", "6", "0")
+        self.assertEqual(code, 1)
+        self.assertIn("Division by zero", out)`,chk:[[/def\s+test_\w+\s*\(self\)/,"Define a test_… method that takes self"],[/run_cli\s*\(\s*["']add_divide["']\s*,\s*["']4["']\s*,\s*["']6["']\s*,\s*["']0["']\s*\)/,'Run: run_cli("add_divide", "4", "6", "0")'],[/assert\w+\s*\(/,"Use an assert… method"],[/\b1\b/,"Check the exit code 1"],[/Division by zero/,'Check the message mentions "Division by zero"']]}},
+java:{name:"Java",
+calc:`// Calculator.java
+public class Calculator {
+    public int add(int a, int b) {
+        return a + b;
+    }
+
+    public int divide(int a, int b) {
+        if (b == 0) {
+            throw new IllegalArgumentException("Division by zero is not allowed");
+        }
+        return a / b;
+    }
+}`,
+svc:`// MathService.java
+public class MathService {
+    private final Calculator calculator;
+
+    public MathService(Calculator calculator) {
+        this.calculator = calculator;
+    }
+
+    public int addAndDivide(int a, int b, int divisor) {
+        int sum = calculator.add(a, b);
+        return calculator.divide(sum, divisor);
+    }
+}`,
+app:`// CalculatorApp.java  (the whole application, with an entry point)
+public class CalculatorApp {
+    public record Result(int code, String output) {}
+
+    private static final String USAGE = "Usage: add A B | divide A B | add_divide A B C";
+    private final Calculator calc = new Calculator();
+    private final MathService service = new MathService(calc);
+
+    // code: 0 = ok, 1 = error, 2 = bad usage
+    public Result run(String... args) {
+        if (args.length == 0) return new Result(2, USAGE);
+        int[] n = new int[args.length - 1];
+        try {
+            for (int i = 1; i < args.length; i++) n[i - 1] = Integer.parseInt(args[i]);
+        } catch (NumberFormatException e) {
+            return new Result(2, "Error: arguments must be integers");
+        }
+        try {
+            if (args[0].equals("add") && n.length == 2)
+                return new Result(0, "" + calc.add(n[0], n[1]));
+            if (args[0].equals("divide") && n.length == 2)
+                return new Result(0, "" + calc.divide(n[0], n[1]));
+            if (args[0].equals("add_divide") && n.length == 3)
+                return new Result(0, "" + service.addAndDivide(n[0], n[1], n[2]));
+        } catch (IllegalArgumentException e) {
+            return new Result(1, "Error: " + e.getMessage());
+        }
+        return new Result(2, USAGE);
+    }
+
+    public static void main(String[] args) {
+        Result r = new CalculatorApp().run(args);
+        System.out.println(r.output());
+        System.exit(r.code());
+    }
+}`,
+test:`// CalculatorSystemTest.java
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+public class CalculatorSystemTest {
+    private CalculatorApp app;
+
+    @BeforeEach
+    public void setUp() {
+        app = new CalculatorApp();   // fresh application for every test
+    }
+
+    @Test
+    public void addCommandPrintsSum() {
+        CalculatorApp.Result r = app.run("add", "2", "3");
+        assertEquals(0, r.code());
+        assertEquals("5", r.output());
+    }
+
+    @Test
+    public void addDivideWorkflow() {
+        CalculatorApp.Result r = app.run("add_divide", "4", "6", "5");
+        assertEquals(0, r.code());
+        assertEquals("2", r.output());
+    }
+
+    @Test
+    public void divideByZeroReportsError() {
+        CalculatorApp.Result r = app.run("divide", "10", "0");
+        assertEquals(1, r.code());
+        assertTrue(r.output().contains("Division by zero"));
+    }
+
+    @Test
+    public void nonIntegerInputIsRejected() {
+        CalculatorApp.Result r = app.run("add", "two", "3");
+        assertEquals(2, r.code());
+    }
+}`,
+proc:`# Truly black-box: launch the compiled program as a separate process
+mvn -q compile
+java -cp target/classes CalculatorApp add 2 3     # prints 5, exit code 0
+java -cp target/classes CalculatorApp divide 10 0 # prints the error, exit code 1`,
+setup:[["Check Java and Maven","Run <code>java -version</code> (JDK 17+) and <code>mvn -v</code>. Records need Java 16 or newer."],["Reuse your Maven project","Use the project from the first tutorial. Put <code>Calculator.java</code>, <code>MathService.java</code> and the new <code>CalculatorApp.java</code> in <code>src/main/java</code>, and <code>CalculatorSystemTest.java</code> in <code>src/test/java</code>."],["Same pom.xml","JUnit 5 and surefire are already configured. If starting fresh, add the dependency shown below and set <code>maven.compiler.source/target</code> to 17."],["Run tests","Run <code>mvn test</code>. Maven compiles the whole application, then runs every test."]],
+pom:`<dependency>
+  <groupId>org.junit.jupiter</groupId>
+  <artifactId>junit-jupiter</artifactId>
+  <version>5.10.2</version>
+  <scope>test</scope>
+</dependency>`,
+run:"mvn test",
+ex1:{starter:`import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+// Add a system test for the command:  add -2 -3
+// It must exit with code 0 and print "-5".
+
+public class CalculatorSystemTest {
+
+    // your test here
+}`,sol:`    @Test
+    public void addNegativeNumbers() {
+        CalculatorApp.Result r = new CalculatorApp().run("add", "-2", "-3");
+        assertEquals(0, r.code());
+        assertEquals("-5", r.output());
+    }`,chk:[[/@Test/,"Annotate the method with @Test"],[/void\s+\w+\s*\(\s*\)/,"Define a void test method with no parameters"],[/\.run\s*\(\s*"add"\s*,\s*"-2"\s*,\s*"-3"\s*\)/,'Run the command: app.run("add", "-2", "-3")'],[/assertEquals\s*\(/,"Use assertEquals(expected, actual)"],[/-5/,'Expect the output "-5"'],[/\b0\b/,"Check the exit code 0"]]},
+ex2:{starter:`import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+// Add a system test for the failing workflow:  add_divide 4 6 0
+// It must exit with code 1 and the message must mention "Division by zero".
+
+public class CalculatorSystemTest {
+
+    // your test here
+}`,sol:`    @Test
+    public void addDivideByZeroReportsError() {
+        CalculatorApp.Result r = new CalculatorApp().run("add_divide", "4", "6", "0");
+        assertEquals(1, r.code());
+        assertTrue(r.output().contains("Division by zero"));
+    }`,chk:[[/@Test/,"Annotate the method with @Test"],[/void\s+\w+\s*\(\s*\)/,"Define a void test method with no parameters"],[/\.run\s*\(\s*"add_divide"\s*,\s*"4"\s*,\s*"6"\s*,\s*"0"\s*\)/,'Run: app.run("add_divide", "4", "6", "0")'],[/assert\w+\s*\(/,"Use an assert… method"],[/\b1\b/,"Check the exit code 1"],[/Division by zero/,'Check the message mentions "Division by zero"']]}}
+};
+const Q1=[{q:"What does a system test check?",o:["One function in isolation","The complete, integrated application through its external interface","Only the database queries"],a:1,w:"A system test treats the whole application as a black box: real input in, observable output out."},
+{q:"Why do our system tests call app.run(...) instead of Calculator.add directly?",o:["Because Calculator is private","Because a system test must use the same entry point a user would","Because it is faster"],a:1,w:"Going through the public entry point proves the parsing, wiring and output work together, not just the maths."},
+{q:"Which is a good assertion for a command-line system test?",o:["The exit code and the printed output","The name of a private variable","The number of lines in calculator.py"],a:0,w:"System tests assert what the user can observe: results, messages and exit codes, never internals."}];
+const Q2=[{q:"Which level is usually the slowest and most expensive to maintain?",o:["Unit tests","Integration tests","System tests"],a:2,w:"System tests run the whole application, so they are slower and more fragile than the lower levels."},
+{q:"How should system tests be balanced with unit tests?",o:["Many more system tests than unit tests","A few system tests for key user journeys on top of many unit tests","Exactly the same number of each"],a:1,w:"This is the test pyramid: many fast unit tests, fewer integration tests, and a small set of system tests."},
+{q:"All unit tests pass but a system test fails. What is the most likely cause?",o:["A unit test is wrong","A problem in the wiring, input handling or user-facing behaviour","The compiler is broken"],a:1,w:"Parts work alone but the assembled application behaves differently, which is exactly what system tests exist to catch."}];
+
+let lang=null,cur=0,done=new Set();
+try{lang=localStorage.getItem("st_lang")}catch(e){}
+const $=s=>document.querySelector(s);
+const el=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
+const EX={},QS={},SK=[null,null,null,"e1","q1",null,"e2","q2",null,"end"];
+function dots(){if(!lang)return;$("#dots").replaceChildren(...steps.map((s,i)=>{const dn=SK[i]&&done.has(SK[i]);const b=el("button",(i===cur?"cur ":"")+(dn?"done":""),dn?"✓":i+1);b.title=s.t;b.onclick=()=>{cur=i;draw()};return b}))}
+function mark(id){if(done.has(id))return;done.add(id);dots()}
+function code(txt){const w=el("div");const b=el("button","cp","Copy");b.onclick=()=>{try{navigator.clipboard.writeText(txt);b.textContent="Copied ✓"}catch(e){b.textContent="Select & copy"}setTimeout(()=>b.textContent="Copy",1500)};const p=el("pre");p.textContent=txt;p.prepend(b);w.append(p);return w}
+
+/* ---------- QUIZ: state lives in QS, so answering never re-renders the step ---------- */
+function quiz(list,id){const w=el("div"),S=QS[id]||(QS[id]={ord:null,pick:{}});
+const shuf=a=>{const r=a.map((_,i)=>i);for(let i=r.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[r[i],r[j]]=[r[j],r[i]]}return r};
+if(!S.ord)S.ord=list.map(q=>shuf(q.o));
+const res=el("div","tip"),rt=el("button","btn ghost","↻ Retry quiz");rt.hidden=true;rt.onclick=()=>{delete QS[id];draw()};
+const upd=()=>{const n=Object.keys(S.pick).length;if(n<list.length){res.textContent="Answered "+n+" / "+list.length+". Answer all questions to see your score.";return}
+const sc=list.filter((q,i)=>S.ord[i][S.pick[i]]===q.a).length;
+res.innerHTML="<b>Score: "+sc+" / "+list.length+"</b> "+(sc===list.length?"🎉 Perfect!":sc>=list.length-1?"👍 Passed. Read the explanation for the one you missed.":"Review the explanations, then retry.");
+rt.hidden=sc===list.length;if(sc>=list.length-1)mark(id)};
+list.forEach((q,qi)=>{const d=el("div","q"),why=el("div","why");d.append(el("p","",(qi+1)+". "+q.q));
+const bs=S.ord[qi].map((oi,pos)=>{const b=el("button","opt",q.o[oi]);b.onclick=()=>{if(qi in S.pick)return;S.pick[qi]=pos;show();upd()};d.append(b);return b});
+const show=()=>{if(!(qi in S.pick))return;const p=S.pick[qi];d.classList.add("lock");bs.forEach((b,pos)=>{if(S.ord[qi][pos]===q.a)b.classList.add("right");else if(pos===p)b.classList.add("wrong")});why.textContent=(S.ord[qi][p]===q.a?"✅ ":"❌ ")+q.w};
+d.append(why);w.append(d);show()});
+upd();w.append(res,rt);return w}
+
+/* ---------- PYTHON: real CPython via Pyodide (loaded on first run) ---------- */
+let pyP=null,pyReady=false;
+function loadPy(){if(!pyP){pyP=new Promise((res,rej)=>{const s=document.createElement("script");s.src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js";s.onload=()=>loadPyodide().then(p=>{pyReady=true;res(p)},rej);s.onerror=()=>rej(new Error("offline"));document.head.append(s)});pyP.catch(()=>{pyP=null})}return pyP}
+const PYRUN=["import unittest, sys","_s = unittest.TestSuite()","for _o in list(globals().values()):","    if isinstance(_o, type) and issubclass(_o, unittest.TestCase) and _o is not unittest.TestCase:","        _s.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(_o))","_r = unittest.TextTestRunner(stream=sys.stdout, verbosity=2).run(_s)","[_r.testsRun, len(_r.failures), len(_r.errors)]"].join("\n");
+async function runPy(src){const py=await loadPy(),out=[];
+py.setStdout({batched:s=>out.push(s)});py.setStderr({batched:s=>out.push(s)});
+const strip=t=>t.replace(/^\s*from\s+(calculator|math_service|app)\s+import.*$/gm,"").replace(/^if\s+__name__\s*==\s*["']__main__["']\s*:[\s\S]*$/m,"");
+const pre=strip(D.py.calc)+"\n\n"+strip(D.py.svc)+"\n\n"+strip(D.py.app)+"\n\n",off=pre.split("\n").length-1;
+const ns=py.globals.get("dict")();let n=0,bad=1;
+try{const r=await py.runPythonAsync(pre+strip(src)+"\n\n"+PYRUN,{globals:ns});const a=Array.from(r.toJs());r.destroy&&r.destroy();n=a[0];bad=a[1]+a[2]}
+catch(e){out.push(String(e.message).trim().split("\n").slice(-5).join("\n"))}
+finally{ns.destroy&&ns.destroy()}
+const text=out.join("\n").replace(/line (\d+)/g,(m,x)=>x>off?"line "+(x-off):m);
+return{n,bad,text:"$ python -m unittest -v\n"+text}}
+
+/* ---------- JAVA: mini JUnit 5 runner (JUnit subset, transpiled to JS) ---------- */
+const JX={IllegalArgumentException:"RuntimeException",ArithmeticException:"RuntimeException",IllegalStateException:"RuntimeException",NullPointerException:"RuntimeException",RuntimeException:"Exception",Exception:"Throwable"};
+const isA=(n,t)=>{while(n){if(n===t)return true;n=JX[n]}return false};
+class JEx extends Error{constructor(n,m){super(m);this.jn=n}}
+class Calculator{add(a,b){return (a+b)|0}divide(a,b){if(b===0)throw new JEx("IllegalArgumentException","Division by zero is not allowed");return Math.trunc(a/b)}}
+class MathService{constructor(c){this.calculator=c}addAndDivide(a,b,d){const s=this.calculator.add(a,b);return this.calculator.divide(s,d)}}
+class CalculatorApp{constructor(){this.calc=new Calculator();this.svc=new MathService(this.calc)}
+run(...a){const U="Usage: add A B | divide A B | add_divide A B C",R=(c,o)=>({code(){return c},output(){return o}});if(!a.length)return R(2,U);
+const n=a.slice(1).map(x=>/^-?\d+$/.test(x)?parseInt(x,10):NaN);if(n.some(isNaN))return R(2,"Error: arguments must be integers");
+try{if(a[0]==="add"&&n.length===2)return R(0,""+this.calc.add(n[0],n[1]));if(a[0]==="divide"&&n.length===2)return R(0,""+this.calc.divide(n[0],n[1]));if(a[0]==="add_divide"&&n.length===3)return R(0,""+this.svc.addAndDivide(n[0],n[1],n[2]))}catch(e){return R(1,"Error: "+e.message)}return R(2,U)}}
+String.prototype.contains=function(s){return this.includes(s)};String.prototype.equals=function(s){return this.valueOf()===s};String.prototype.isEmpty=function(){return this.length===0};
+const AF=m=>{const e=new Error(m);e.af=1;return e};
+const JA={assertEquals(e,a,x){const dl=typeof x==="number";if(dl?Math.abs(e-a)>x:e!==a)throw AF((typeof x==="string"?x+" ==> ":"")+"expected: <"+e+"> but was: <"+a+">")},
+assertNotEquals(e,a){if(e===a)throw AF("expected: not equal but was: <"+a+">")},
+assertTrue(c){if(c!==true)throw AF("expected: <true> but was: <"+c+">")},
+assertFalse(c){if(c!==false)throw AF("expected: <false> but was: <"+c+">")},
+assertNull(v){if(v!=null)throw AF("expected: <null> but was: <"+v+">")},
+assertNotNull(v){if(v==null)throw AF("expected: not <null>")},
+assertThrows(t,fn){try{fn()}catch(e){if(e.af||e instanceof ReferenceError||e instanceof TypeError)throw e;if(e.jn&&isA(e.jn,t))return e;throw AF("Unexpected exception type thrown, expected: <"+t+"> but was: <"+(e.jn||e.name)+">")}throw AF("Expected "+t+" to be thrown, but nothing was thrown.")},
+assertDoesNotThrow(fn){try{return fn()}catch(e){if(e.af||e instanceof ReferenceError||e instanceof TypeError)throw e;throw AF("Unexpected exception thrown: "+(e.jn||e.name)+": "+e.message)}},
+fail(m){throw AF(m||"")}};
+const tj=b=>b.replace(/\b([A-Z]\w*)\.class\b/g,'"$1"').replace(/(\d)[Ll]\b/g,"$1").replace(/\b(?:final\s+)?(?:int|long|double|float|boolean|String|var|CalculatorApp\.Result|CalculatorApp|Calculator|MathService|Result)\s+(\w+)\s*([=;])/g,"let $1 $2").replace(/->/g,"=>");
+function jparse(src){src=src.replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm,"").replace(/^\s*(import|package)\s.*$/gm,"");
+const m=/class\s+(\w+)[^{]*\{/.exec(src);if(!m)throw new Error("error: class, interface, enum, or record expected");
+const items=[];let h="",b0=0,d=0,q=null,closed=false;
+for(let i=m.index+m[0].length;i<src.length;i++){const c=src[i];
+if(q){if(c==="\\")i++;else if(c===q)q=null;if(!d)h+=c;continue}
+if(c==='"'||c==="'"){q=c;if(!d)h+=c;continue}
+if(c==="{"){if(!d)b0=i+1;d++;continue}
+if(c==="}"){if(!d){closed=true;break}d--;if(!d){items.push({h:h.trim(),body:src.slice(b0,i)});h=""}continue}
+if(!d){if(c===";"){items.push({h:h.trim(),field:1});h=""}else h+=c}}
+if(!closed)throw new Error("error: reached end of file while parsing");return{name:m[1],items}}
+function semi(b){let p=0;for(const r of b.split("\n")){const l=r.replace(/"(?:\\.|[^"\\])*"/g,'""').trim();if(!l)continue;p+=(l.match(/\(/g)||[]).length-(l.match(/\)/g)||[]).length;if(p>0)continue;if(!/[;{}(,]$|->$|[+\-*\/&|?:=]$|^(\}\s*)?(else|if|for|while|try|catch)\b/.test(l))return l}return null}
+function runJava(src){const head="$ mvn test\n",ce=m=>({n:0,bad:1,text:head+"[ERROR] COMPILATION ERROR\n[ERROR] "+m+"\nBUILD FAILURE"});
+let P;try{P=jparse(src)}catch(e){return ce(e.message)}
+const fields=[],before=[],tests=[];
+for(const x of P.items){if(x.field){const f=/(\w+)\s*(?:=\s*([\s\S]+))?$/.exec(x.h.replace(/@\w+/g,"").trim());if(f)fields.push([f[1],f[2]||"null"])}
+else if(/@Test\b/.test(x.h)){const n=/(\w+)\s*\(\s*\)\s*$/.exec(x.h);if(!n)return ce("error: @Test methods must take no parameters");tests.push([n[1],x.body,/@Disabled/.test(x.h)])}
+else if(/@BeforeEach\b/.test(x.h))before.push(["setup",x.body])}
+const mk=(nm,body)=>{const s=semi(body);if(s)throw new Error("error: ';' expected\n[ERROR]   in "+nm+"(): "+s.trim());try{return new Function("F","Calculator","MathService","CalculatorApp","JEx","with(F){"+tj(body)+"\n}")}catch(e){throw new Error("error: illegal start of expression ("+e.message+")\n[ERROR]   in "+nm+"()")}};
+let T,B,FI;try{T=tests.map(t=>({n:t[0],f:mk(t[0],t[1]),skip:t[2]}));B=before.map(b=>mk(b[0],b[1]));FI=fields.map(f=>mk(f[0],f[0]+" = "+f[1]+";"))}catch(e){return ce(e.message)}
+const log=["[INFO] Running "+P.name];let ok=0,fl=0,er=0,sk=0;
+for(const t of T){if(t.skip){sk++;log.push("[WARNING]   ⊘ "+t.n+" (disabled)");continue}
+const F=Object.create(JA);fields.forEach(f=>F[f[0]]=null);
+try{[...FI,...B,t.f].forEach(f=>f(F,Calculator,MathService,CalculatorApp,JEx));ok++;log.push("[INFO]    ✓ "+t.n)}
+catch(e){if(e.af){fl++;log.push("[ERROR]   ✗ "+t.n+"\n            AssertionFailedError: "+e.message)}
+else if(e instanceof ReferenceError||/is not a function|is not a constructor/.test(e.message)){const s=/(\w+) is not (?:a function|a constructor|defined)/.exec(e.message);return ce("error: cannot find symbol\n[ERROR]   symbol: "+(e instanceof ReferenceError?"variable ":"method/class ")+(s?s[1]:"?")+"\n[ERROR]   in "+t.n+"()")}
+else{er++;log.push("[ERROR]   ✗ "+t.n+"\n            "+(e.jn||e.name)+": "+e.message)}}}
+const n=ok+fl+er,bad=fl+er;if(!T.length)log.push("[WARNING] No tests found. Did you add @Test?");
+log.push("Tests run: "+n+", Failures: "+fl+", Errors: "+er+", Skipped: "+sk,bad?"BUILD FAILURE":"BUILD SUCCESS");return{n,bad,text:head+log.join("\n")}}
+
+/* ---------- EXERCISE: editable, really executed, state kept while navigating ---------- */
+function exercise(ex,id,L){const w=el("div"),k=L+id,py=L==="py";
+w.append(el("p","","Write your test and press <b>Run</b> (or <kbd>Ctrl</kbd>+<kbd>Enter</kbd>). Your code is "+(py?"executed by real Python (Pyodide, downloaded on first run).":"executed by a built-in JUnit 5 runner (a subset of Java; use <code>mvn test</code> locally for the real thing).")));
+const det=el("details","fl");det.append(el("summary","","📂 Project files you can use (Calculator, MathService, CalculatorApp)"),code(D[L].calc),code(D[L].svc),code(D[L].app));
+const ta=el("textarea");ta.value=EX[k]??ex.starter;ta.spellcheck=false;const out=el("div");
+ta.oninput=()=>EX[k]=ta.value;
+const c=el("button","btn","▶ Run tests"),h=el("button","btn ghost","💡 Show solution"),r=el("button","btn ghost","↺ Reset");
+ta.onkeydown=e=>{if(e.key==="Tab"&&!e.shiftKey){e.preventDefault();ta.setRangeText("    ",ta.selectionStart,ta.selectionEnd,"end");EX[k]=ta.value}else if(e.key==="Enter"&&(e.ctrlKey||e.metaKey)){e.preventDefault();c.click()}};
+c.onclick=async()=>{const v=ta.value;c.disabled=true;out.className="out";out.textContent=py&&!pyReady?"⏳ Loading Python runtime (about 10 MB, first run only)…":"⏳ Running…";
+const plain=v.replace(py?/#.*$/gm:/\/\*[\s\S]*?\*\/|\/\/.*$/gm,"");const miss=ex.chk.filter(x=>!x[0].test(plain));
+let res,fb=false;try{res=py?await runPy(v):runJava(v)}catch(e){fb=true;res={n:1,bad:0,text:"⚠ Could not load the Python runtime (offline?). Falling back to a structure check only. Your code was NOT executed."}}
+const ok=res.n>0&&!res.bad&&!miss.length;
+const verdict=ok?"✔ Exercise complete!":res.bad?"✖ Fix the failing tests or errors above, then run again.":!res.n?"✖ No tests ran. Add a test method inside the class.":"✖ Tests pass, but the exercise still asks you to:\n• "+miss.map(m=>m[1]).join("\n• ");
+out.className="out "+(ok?"ok":"bad");out.textContent=res.text+"\n\n"+verdict;if(ok)mark(id);c.disabled=false};
+h.onclick=()=>{out.className="out ok";out.textContent="Solution (add inside the class):\n\n"+ex.sol};
+r.onclick=()=>{ta.value=ex.starter;EX[k]=ta.value;out.className="";out.textContent=""};
+w.append(det,ta,c,h,r,out);return w}
+
+const steps=[
+{t:"Welcome & setup",r:L=>{const d=D[L],w=el("div");w.append(el("h2","","Step 1 · Set up your local environment"),el("p","","A <b>system test</b> exercises the complete application from the outside, exactly as a user would. We reuse the same <code>Calculator</code> and <code>MathService</code> and wrap them in a small command-line app. Setup for "+d.name+":"));const ol=el("ol","st");d.setup.forEach(s=>ol.append(el("li","","<b>"+s[0]+".</b> "+s[1])));w.append(ol);if(d.pom)w.append(el("p","","Dependency for <code>pom.xml</code>:"),code(d.pom));w.append(el("div","tip","💡 Unit test = one piece. Integration test = pieces together. <b>System test = the whole application, end to end, through its real entry point.</b>"));return w}},
+{t:"The application",r:L=>{const d=D[L],w=el("div");w.append(el("h2","","Step 2 · The application under test"),el("p","","Recap: <code>Calculator</code> does the maths and <code>MathService</code> combines two calls. Both are unchanged:"));const det=el("details","fl");det.append(el("summary","","📂 Show Calculator and MathService"),code(d.calc),code(d.svc));w.append(det,el("p","","The new piece is <code>"+(L==="py"?"CalculatorApp":"CalculatorApp")+"</code>, the <b>entry point</b>. It reads commands, calls the service, and returns an exit code plus text:"),code(d.app));const tw=el("div","tw"),tb=el("table");tb.innerHTML="<tr><th>Command</th><th>Output</th><th>Exit code</th></tr><tr><td><code>add 2 3</code></td><td><code>5</code></td><td>0</td></tr><tr><td><code>add_divide 4 6 5</code></td><td><code>2</code></td><td>0</td></tr><tr><td><code>divide 10 0</code></td><td><code>Error: Division by zero…</code></td><td>1</td></tr><tr><td><code>add two 3</code></td><td><code>Error: arguments must be integers</code></td><td>2</td></tr>";tw.append(tb);w.append(tw);return w}},
+{t:"Your first system tests",r:L=>{const d=D[L],w=el("div");w.append(el("h2","","Step 3 · Anatomy of a system test"),code(d.test));const ol=el("ol","st");(L==="py"?["<code>run_cli</code> is the <b>only door</b> into the app, like a user typing a command. Tests never touch <code>Calculator</code> directly.","<b>Arrange</b> the command, <b>Act</b> by running it, <b>Assert</b> what the user can observe: exit code and output.","Each call builds a fresh <code>CalculatorApp()</code>, so tests share no state.","Cover the happy path, a workflow, a domain error (code 1) and bad input (code 2).","Run: <code>python -m unittest -v</code>"]:["<code>app.run(...)</code> is the <b>only door</b> into the app, like a user typing a command. Tests never touch <code>Calculator</code> directly.","<b>Arrange</b> the command, <b>Act</b> by running it, <b>Assert</b> what the user can observe: exit code and output.","<code>@BeforeEach</code> builds a fresh <code>CalculatorApp</code> for every test, so tests share no state.","Cover the happy path, a workflow, a domain error (code 1) and bad input (code 2).","Run: <code>mvn test</code>"]).forEach(x=>ol.append(el("li","",x)));w.append(ol,el("p","","To go fully black-box locally, launch the program as a separate process:"),code(d.proc));return w}},
+{t:"Exercise 1",r:L=>{const w=el("div");w.append(el("h2","","Step 4 · Your turn: a happy-path journey"),exercise(D[L].ex1,"e1",L));return w}},
+{t:"System quiz",r:L=>{const w=el("div");w.append(el("h2","","Step 5 · Quiz: system testing"),quiz(Q1,"q1"));return w}},
+{t:"Journeys & levels",r:L=>{const w=el("div");w.append(el("h2","","Step 6 · Error journeys and where system tests fit"),el("p","","A user journey is not only the happy path. Exit codes make failures testable: <b>0</b> success, <b>1</b> domain error (division by zero), <b>2</b> bad usage or input. Assert the code <b>and</b> the message."));const tw=el("div","tw"),tb=el("table");tb.innerHTML="<tr><th>Level</th><th>Scope</th><th>Entry point</th><th>Speed</th><th>Example here</th></tr><tr><td><b>Unit</b></td><td>One class</td><td>A method call</td><td>⚡ fastest</td><td><code>Calculator.add</code></td></tr><tr><td><b>Integration</b></td><td>Components together</td><td>Real collaborators</td><td>fast</td><td><code>MathService</code> + <code>Calculator</code></td></tr><tr><td><b>System</b></td><td>Whole application</td><td>Command / UI / API</td><td>🐢 slowest</td><td><code>add_divide 4 6 5</code> prints 2</td></tr>";tw.append(tb);w.append(tw,el("div","tip","🔺 Test pyramid: many unit tests, fewer integration tests, and a <b>small set of system tests</b> covering the journeys that matter most."),el("p","","Next you will write the error-path journey yourself."));return w}},
+{t:"Exercise 2",r:L=>{const w=el("div");w.append(el("h2","","Step 7 · Your turn: an error journey"),exercise(D[L].ex2,"e2",L));return w}},
+{t:"Levels quiz",r:L=>{const w=el("div");w.append(el("h2","","Step 8 · Quiz: test levels"),quiz(Q2,"q2"));return w}},
+{t:"Best practices",r:L=>{const w=el("div");w.append(el("h2","","Step 9 · Best practices"));const ol=el("ol","st");["<b>Stay black-box</b>: go through the public entry point only.","<b>Cover key user journeys</b>: happy path, error path and invalid input.","<b>Assert observable results</b>: exit codes, messages and output, not internals.","<b>Isolate each test</b>: a fresh app instance and no shared state.","<b>Keep them few and stable</b>: they are slow, so leave details to unit tests.","<b>Run them last</b> in CI/CD: unit, then integration, then system tests."].forEach(x=>ol.append(el("li","",x)));w.append(ol,el("div","tip","➡️ Next: a one-page cheat sheet of everything you’ve learned."));return w}},
+{t:"Key takeaways",r:L=>{const w=el("div");w.append(el("h2","","Step 10 · Key takeaways cheat sheet"));
+const S=[["System tests",["A system test checks the <b>complete application</b> through its real external interface.","Treat the app as a <b>black box</b>: input in, exit code and output out.","Cover <b>user journeys</b>, including error paths and invalid input."]],["Compared with other levels",["<b>Unit</b>: one piece. <b>Integration</b>: pieces together. <b>System</b>: everything, end to end.","System tests are the <b>slowest and costliest</b>, so keep a small, stable set."]],["Best practices",["Use the <b>public entry point only</b> and a <b>fresh app</b> per test.","Assert <b>exit codes and messages</b>, not internals.","<b>Automate in CI/CD</b>: run system tests after unit and integration tests."]]];
+S.forEach(s=>{w.append(el("h3","",s[0]));const ul=el("ul","st");s[1].forEach(x=>ul.append(el("li","",x)));w.append(ul)});
+const R=L==="py"?[["Entry point","CalculatorApp().run(args)"],["Fresh app","build CalculatorApp() per test"],["Check result","self.assertEqual(run_cli(...), (0, \"5\"))"],["Check message","self.assertIn(\"text\", out)"],["File naming","test_system.py"],["Run locally","python -m unittest -v"]]:[["Entry point","new CalculatorApp().run(args)"],["Fresh app","@BeforeEach"],["Check result","assertEquals(0, r.code())"],["Check message","assertTrue(r.output().contains(\"text\"))"],["File naming","*SystemTest.java in src/test/java"],["Run locally","mvn test"]];
+w.append(el("h3","",D[L].name+" quick reference"));const tw=el("div","tw"),tb=el("table");tb.innerHTML="<tr><th>Task</th><th>"+D[L].name+"</th></tr>"+R.map(r=>"<tr><td>"+r[0]+"</td><td><code></code></td></tr>").join("");
+tb.querySelectorAll("code").forEach((c,i)=>c.textContent=R[i][1]);tw.append(tb);w.append(tw);
+const txt=S.map(s=>s[0]+"\n"+s[1].map(x=>"- "+x.replace(/<[^>]+>/g,"")).join("\n")).join("\n\n")+"\n\n"+D[L].name+" quick reference\n"+R.map(r=>"- "+r[0]+": "+r[1]).join("\n");
+const b=el("button","btn","📋 Copy takeaways");b.onclick=()=>{try{navigator.clipboard.writeText(txt);b.textContent="Copied ✓"}catch(e){b.textContent="Copy not available"}setTimeout(()=>b.textContent="📋 Copy takeaways",1800)};
+const pr=el("button","btn ghost","🖨️ Print");pr.onclick=()=>window.print();
+w.append(b,pr,el("div","tip","🎓 Course complete! You now know unit, integration and system testing. Switch language above to repeat it in the other one."));done.add("end");return w}}];
+
+function draw(){
+document.querySelectorAll("#pick button").forEach(b=>b.classList.toggle("on",b.dataset.l===lang));
+const c=el("div","card");
+if(!lang){c.innerHTML="<h2>👋 Welcome</h2><p>Choose <b>Python</b> or <b>Java</b> above to begin. You’ll set up locally, explore the whole application, then write system tests, with exercises and quizzes along the way.</p>";$("#stage").replaceChildren(c);$("#dots").replaceChildren();$("#pb").style.width="0";$("#pl").textContent="";$("#ps").textContent="";return}
+c.append(steps[cur].r(lang));$("#stage").replaceChildren(c);
+$("#pb").style.width=Math.round((cur+1)/steps.length*100)+"%";
+$("#pl").textContent=D[lang].name+" track · "+steps[cur].t;$("#ps").textContent="Step "+(cur+1)+" of "+steps.length;
+dots();
+$("#prev").disabled=cur===0;$("#next").disabled=cur===steps.length-1}
+document.querySelectorAll("#pick button").forEach(b=>b.onclick=()=>{lang=b.dataset.l;cur=0;done=new Set();for(const k in QS)delete QS[k];try{localStorage.setItem("st_lang",lang)}catch(e){}draw()});
+$("#prev").onclick=()=>{if(cur>0){cur--;draw();scrollTo(0,0)}};
+$("#next").onclick=()=>{if(cur<steps.length-1){cur++;draw();scrollTo(0,0)}};
+draw();
+</script>
+</body>
+</html>
